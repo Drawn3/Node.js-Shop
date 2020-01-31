@@ -54,3 +54,12 @@
 .length_cart{
     position: absolute;
 }
+
+a{
+    text-decoration: none;
+    font-size: 15px;
+    color: blue;
+    display: block;
+    text-align: center;
+    font-weight: 500;
+}

@@ -25,7 +25,6 @@ router.get('/' , auth, async (req, res) => {
         console.log(e)
     }
 })
-
 router.post('/' , auth, async (req, res) => {
     try{
         const user = await req.user
