@@ -8,7 +8,7 @@ const exphbs = require('express-handlebars')
 const session = require('express-session')
 //security routes//
 const csrf = require('csurf')
-//save user sessions in mongo db for protected
+//save user sessions in mongodb for protected
 const MongoDBStore = require('connect-mongodb-session')(session);
 //handling mistakes//
 const flash = require('connect-flash')

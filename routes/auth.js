@@ -85,18 +85,66 @@ router.get('/reset', (req,res)=>{
         error: req.flash('error')
     })
 })
+
+//password security page//
+router.get('/password/:token', async (req,res)=>{
+    if(!req.params.token){
+        return res.redirect('auth/login')
+    }
+    try {
+        const user = User.findOne({
+            resetToken: req.params.token,
+            resetTokenExp: {$gt: Date.now}
+        })
+
+    if(!user){
+        return res.redirect('auth/login/')
+    }else{
+        res.render('auth/password',{
+            title: 'Восстановить доступ',
+            error: req.flash('error'),
+            userId: user._id.toString(),
+            token: req.params.token
+        })
+    }
+    } catch (error) {
+        console.log(error)   
+    }
+})
+//password security page request//
+router.post('/password', async (req,res) =>{
+    try {
+        const user = await User.findOne({
+            _id: req.body.userId,
+            resetToken: req.body.token,
+            resetTokenExp: {$gt: Date.now}
+        })
+
+        if(user){
+            user.password = await bcrypt.hash(req.body.password, 10)
+            user.resetToken = undefined
+            user.resetTokenExp = undefined,
+            await user.save()
+            res.redirect('/auth/login')
+        }else{
+            req.flash('logginError', 'Время жизни токена истекло')
+            res.redirect('/auth/login')
+        }
+    } catch (error) {
+        console.log(error)
+    }
+})
 //new password methods//
 router.post('/reset', (req,res)=>{
     try {
+        //generate token//
         crypto.randomBytes(32, async (err, buffer)=>{
             if(err){
                 req.flash('error', 'Что-то пошло не так. Повторите попытку позже')
                 res.redirect('/auth/reset')
             }
             const token = buffer.toString('hex')
-
             const candidate = await User.findOne({email: req.body.email})
-
             if(candidate){
                 candidate.resetToken = token
                 candidate.resetTokenExp = Date.now() + 60 * 60 * 100
