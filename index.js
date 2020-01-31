@@ -21,7 +21,7 @@ const cardRoutes = require('./routes/card')
 const ordersRoutes = require('./routes/orders')
 const authRoutes = require('./routes/auth')
 
-//Own middleware//
+//Own middleware/
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
 
