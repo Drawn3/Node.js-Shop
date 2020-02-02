@@ -12,6 +12,9 @@
             {{/if}}
             <h1>Войти в магазин</h1>
             <form action="/auth/login" method="POST">
+                {{#if loginErorr}}
+                    <p class="error">{{loginErorr}}</p>
+                {{/if}}
                 <div class="input-field">
                     <input  id="email" name="email" type="email" class="validate" required>
                     <label for="email">Email</label>

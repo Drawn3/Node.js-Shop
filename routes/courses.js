@@ -3,13 +3,18 @@ const Course = require('../models/course')
 const auth = require('../middleware/auth')
 const router = Router()
 
+//function protected delete and edit//
+function ownerCourse(course,req){
+    return course.userId.toString() === req.user._id.toString()
+}
+
 //get all courses//
 router.get('/',  async (req, res)=>{
     try{
         const courses = await Course.find()
         .populate('userId', 'email name')
         .select('price title img');
-        
+    
             res.render('courses',{
                 title: "Курсы",
                 isCourses: true,
@@ -29,7 +34,8 @@ router.get("/:id/edit", auth, async (req,res)=>{
     }
     try{
         const course = await Course.findById(req.params.id) 
-        if(course.userId.toString() !== req.user._id.toString()){
+       
+        if(!ownerCourse(course,req)){
             return res.redirect('/courses')
         } 
         res.render('course-edit',{
@@ -44,7 +50,11 @@ router.get("/:id/edit", auth, async (req,res)=>{
 //delete one course//
 router.post("/remove", auth, async (req,res)=>{
     try{
-         await Course.deleteOne({_id: req.body.id})
+         await Course.deleteOne({
+             _id: req.body.id,
+             userId: req.user._id
+            
+            })
          res.redirect('/courses')
     }catch(e){
         console.log(e)
@@ -54,12 +64,14 @@ router.post("/remove", auth, async (req,res)=>{
 //update one course//
 router.post('/edit', auth, async (req,res)=>{
     try{
-        if(course.userId.toString() !== req.user._id.toString()){
-            return res.redirect('/courses')
-        } 
         const {id} = req.body
         delete req.body.id
-        await Course.findByIdAndUpdate(id, req.body)
+        const course = await Course.findById(id)
+        if(!ownerCourse(course,req)){
+            return res.redirect('/courses')
+        }
+        Object.assign(course,req.body)
+        await course.save()
         res.redirect('/courses')
     }catch(e){
         console.log(e)
@@ -67,7 +79,6 @@ router.post('/edit', auth, async (req,res)=>{
 })      
 //render one course by id//
 router.get("/:id", async (req,res)=>{
-
     try{
         const course = await Course.findById(req.params.id)
         res.render('course',{

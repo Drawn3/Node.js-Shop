@@ -37,7 +37,9 @@ router.get('/logout', async (req,res) => {
 router.post('/registration',registrationValidator, async (req, res) => {
     try{
         const {email, password, confirm, name} = req.body
+
         const errors = validationResult(req)
+        
         if(!errors.isEmpty()){
             req.flash('registrationError', errors.array()[0].msg)
             return res.status(422).redirect('/auth/login/#registration')
