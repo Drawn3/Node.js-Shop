@@ -6,20 +6,15 @@ const sendgrid = require('nodemailer-sendgrid-transport')
 const keys = require('../keys')
 const resetEmail = require('../email/reset')
 const regEmails = require('../email/registration')
+const {validationResult} = require('express-validator')
+const {registrationValidator} = require('../utils/validators.js')
 const bcrypt = require('bcryptjs')
 const router = Router();
 
 const transporter = nodemailer.createTransport(sendgrid({
     auth:{api_key: keys.SEND_GRID_APIKEYS}
 }))
-// let transporter = nodemailer.createTransport({
-//     host: 'smtp.gmail.com',
-//     port: 587,
-//     secure: false,
-//     auth: {
-//         user: 'kitkat978@mail.ru',
-//     }
-//     });
+
 router.get('/login' , async (req, res) => {
     res.render('auth/login', {
         title: 'Авторизация',
@@ -30,25 +25,23 @@ router.get('/login' , async (req, res) => {
         success: req.flash('success')
     })
 })
+
 // exit from auth//
 router.get('/logout', async (req,res) => {
     req.session.destroy(()=>{
         res.redirect('/auth/login')
     })
 })
+
 //registration request//
-router.post('/registration' , async (req, res) => {
+router.post('/registration',registrationValidator, async (req, res) => {
     try{
         const {email, password, confirm, name} = req.body
-        const candidate = await User.findOne({email})
-
-        if(candidate){
-            req.flash('registrationError', 'Такой Email, уже существует')
-            res.redirect('/auth/login/#registration')
-        }else if(password !== confirm){
-            req.flash('passwordError', 'Пароли не совпадают')
-            res.redirect('/auth/login/#registration')
-        }else{
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            req.flash('registrationError', errors.array()[0].msg)
+            return res.status(422).redirect('/auth/login/#registration')
+        }
             const passCrypt = await bcrypt.hash(password, 10)
             const user = new User({
                 email,
@@ -63,7 +56,7 @@ router.post('/registration' , async (req, res) => {
             await transporter.sendMail(regEmails(email,name))
             req.flash('success', 'Введите данные при регистрации')
             res.redirect('/auth/login')
-        }
+        
     }catch(e){
         console.log(e)
     }

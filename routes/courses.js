@@ -28,7 +28,10 @@ router.get("/:id/edit", auth, async (req,res)=>{
         return  res.redirect('/')
     }
     try{
-        const course = await Course.findById(req.params.id)   
+        const course = await Course.findById(req.params.id) 
+        if(course.userId.toString() !== req.user._id.toString()){
+            return res.redirect('/courses')
+        } 
         res.render('course-edit',{
             title: `Редактировать ${course.title}`,
             course
@@ -51,6 +54,9 @@ router.post("/remove", auth, async (req,res)=>{
 //update one course//
 router.post('/edit', auth, async (req,res)=>{
     try{
+        if(course.userId.toString() !== req.user._id.toString()){
+            return res.redirect('/courses')
+        } 
         const {id} = req.body
         delete req.body.id
         await Course.findByIdAndUpdate(id, req.body)
@@ -61,6 +67,7 @@ router.post('/edit', auth, async (req,res)=>{
 })      
 //render one course by id//
 router.get("/:id", async (req,res)=>{
+
     try{
         const course = await Course.findById(req.params.id)
         res.render('course',{

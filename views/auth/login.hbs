@@ -35,7 +35,7 @@
                 <p class="error">{{passwordError}}</p>
             {{/if}}
             <h1>Регистрация</h1>
-            <form action="/auth/registration" method="POST">
+            <form action="/auth/registration" method="POST" novalidate>
                 <div class="input-field">
                     <input  id="remail" name="email" type="email" class="validate" required>
                     <label for="remail">Email</label>
