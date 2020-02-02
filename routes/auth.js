@@ -12,27 +12,41 @@ const router = Router();
 const transporter = nodemailer.createTransport(sendgrid({
     auth:{api_key: keys.SEND_GRID_APIKEYS}
 }))
-
+// let transporter = nodemailer.createTransport({
+//     host: 'smtp.gmail.com',
+//     port: 587,
+//     secure: false,
+//     auth: {
+//         user: 'kitkat978@mail.ru',
+//     }
+//     });
 router.get('/login' , async (req, res) => {
     res.render('auth/login', {
         title: 'Авторизация',
         isLogin: true,
         loginErorr: req.flash('loginErorr'),
-        registrationError: req.flash('registrationError')
+        registrationError: req.flash('registrationError'),
+        passwordError: req.flash('passwordError'),
+        success: req.flash('success')
     })
 })
+// exit from auth//
 router.get('/logout', async (req,res) => {
     req.session.destroy(()=>{
         res.redirect('/auth/login')
     })
 })
+//registration request//
 router.post('/registration' , async (req, res) => {
     try{
-        const {email, password, repeat, name} = req.body
+        const {email, password, confirm, name} = req.body
         const candidate = await User.findOne({email})
 
         if(candidate){
             req.flash('registrationError', 'Такой Email, уже существует')
+            res.redirect('/auth/login/#registration')
+        }else if(password !== confirm){
+            req.flash('passwordError', 'Пароли не совпадают')
             res.redirect('/auth/login/#registration')
         }else{
             const passCrypt = await bcrypt.hash(password, 10)
@@ -47,12 +61,14 @@ router.post('/registration' , async (req, res) => {
             
             await user.save()
             await transporter.sendMail(regEmails(email,name))
+            req.flash('success', 'Введите данные при регистрации')
             res.redirect('/auth/login')
         }
     }catch(e){
         console.log(e)
     }
 })
+//authentication request//
 router.post('/login' , async (req, res) => {
     try{
         const {email, password} = req.body
@@ -77,15 +93,13 @@ router.post('/login' , async (req, res) => {
         console.log(e)
     }
 })
-
-
+//reset page//
 router.get('/reset', (req,res)=>{
     res.render('auth/reset',{
         title: 'Забыли пароль',
         error: req.flash('error')
     })
 })
-
 //password security page//
 router.get('/password/:token', async (req,res)=>{
     if(!req.params.token){
@@ -119,7 +133,6 @@ router.post('/password', async (req,res) =>{
             resetToken: req.body.token,
             resetTokenExp: {$gt: Date.now}
         })
-
         if(user){
             user.password = await bcrypt.hash(req.body.password, 10)
             user.resetToken = undefined
@@ -127,7 +140,7 @@ router.post('/password', async (req,res) =>{
             await user.save()
             res.redirect('/auth/login')
         }else{
-            req.flash('logginError', 'Время жизни токена истекло')
+            req.flash('error', 'Время жизни токена истекло')
             res.redirect('/auth/login')
         }
     } catch (error) {

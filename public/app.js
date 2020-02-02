@@ -1,4 +1,12 @@
 //price transformation//
+window.onload = function (){
+   let i = document.querySelector('.lds-circle');
+   setTimeout(()=>{
+   i.style.display = 'none'
+    }, 5000)
+}
+
+
 const toCurrency = price =>{
    return new Intl.NumberFormat('ru-Ru',{
       currency: 'rub',
@@ -64,7 +72,6 @@ if($card){
       }
    })
 }
-
 
 
 var instance = M.Tabs.init(document.querySelectorAll('.tabs'));

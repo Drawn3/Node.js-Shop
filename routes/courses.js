@@ -9,18 +9,17 @@ router.get('/',  async (req, res)=>{
         const courses = await Course.find()
         .populate('userId', 'email name')
         .select('price title img');
+        
             res.render('courses',{
                 title: "Курсы",
                 isCourses: true,
-                userId: req.user ? req.user._id : null,
+                userId: req.user ? req.user._id.toString() : null,
                 courses
         
             })
     }catch(e){
         console.log(e)
     }
-
-   
 })
 
 //edit one course//
@@ -28,11 +27,15 @@ router.get("/:id/edit", auth, async (req,res)=>{
     if(!req.query.allow){
         return  res.redirect('/')
     }
-    const course = await Course.findById(req.params.id)   
-    res.render('course-edit',{
-        title: `Редактировать ${course.title}`,
-        course
-    })
+    try{
+        const course = await Course.findById(req.params.id)   
+        res.render('course-edit',{
+            title: `Редактировать ${course.title}`,
+            course
+        })
+    }catch(e){
+        console.log(e)
+    }
 })
 
 //delete one course//
@@ -58,12 +61,16 @@ router.post('/edit', auth, async (req,res)=>{
 })      
 //render one course by id//
 router.get("/:id", async (req,res)=>{
-    const course = await Course.findById(req.params.id)
-    res.render('course',{
-        title: `Курс `,
-        course
-    })
-    
+    try{
+        const course = await Course.findById(req.params.id)
+        res.render('course',{
+            title: `Курс `,
+            course
+        })
+    }catch(e){
+        console.log(e)
+    }
+  
 })
 
 module.exports = router
