@@ -1,6 +1,5 @@
 <h1>Корзина</h1>
 <div id="card">
-<p>{{con}}</p>
 {{#if courses.length}}
 <table>
     <thead>
@@ -14,7 +13,7 @@
         {{#each courses}}
         <tr>
             <td>{{title}}</td>
-            <td>{{count}}</td>
+            <td><button class="btn btn-primary js-minus" >-</button>{{count}}</td>
             <td>
                 <button 
                 class="btn btn-primary js-remove" 

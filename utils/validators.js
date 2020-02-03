@@ -53,7 +53,5 @@ exports.courseValidator = [
         .isNumeric()
         .withMessage('Введите корректную цену'),
 
-    body('img')
-        // .withMessage('Введите корректный URL картинки')
-        .isURL()
+    body('img','Введите корректный URL картинки').isURL()
 ]

@@ -24,6 +24,7 @@ const authRoutes = require('./routes/auth')
 //Own middleware//
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
+const mistakeRoutes = require('./middleware/404')
 
 //keys best practise with global variables//
 const keys = require('./keys')
@@ -74,6 +75,7 @@ app.use('/card', cardRoutes)
 app.use('/orders',ordersRoutes)
 app.use('/auth', authRoutes)
 
+app.use(mistakeRoutes)
 //global port//
 const PORT = process.env.PORT || 4000
 

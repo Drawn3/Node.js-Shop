@@ -16,7 +16,7 @@ function mapCartItems(cart){
     return cart.items.map(item => ({
        ...item.courseId._doc,
        id: item.courseId.id,
-       count: item.count
+       count: item.count + 1
      }
     ))
 }
