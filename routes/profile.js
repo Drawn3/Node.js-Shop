@@ -15,13 +15,13 @@ router.post('/', auth, async (req,res) =>{
         const user = await User.findById(req.user._id)
 
         const toChange = {
-            user: req.body.name
+            name: req.body.name
         }
-        console.log(toChange)
+
         if(req.file){
             toChange.userAvatar = req.file.path
         }
-
+        console.log(toChange)
         Object.assign(user, toChange)
 
         await user.save()
