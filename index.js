@@ -20,12 +20,13 @@ const coursesRoutes = require('./routes/courses')
 const cardRoutes = require('./routes/card')
 const ordersRoutes = require('./routes/orders')
 const authRoutes = require('./routes/auth')
+const profileRoutes = require('./routes/profile')
 
 //Own middleware//
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
 const mistakeRoutes = require('./middleware/404')
-
+const fileMiddleware = require('./middleware/file')
 //keys best practise with global variables//
 const keys = require('./keys')
 
@@ -53,6 +54,7 @@ const store = new MongoDBStore({
 
 //puplic folder for static files//
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use(express.urlencoded({extended:true}))
 app.use(session({
     secret: keys.SESSION_SECRET,
@@ -62,6 +64,7 @@ app.use(session({
 }))
 
 //init middlewares//
+app.use(fileMiddleware.single('avatar'))
 app.use(csrf())
 app.use(flash())
 app.use(varMiddleware)
@@ -74,6 +77,7 @@ app.use('/courses',coursesRoutes)
 app.use('/card', cardRoutes)
 app.use('/orders',ordersRoutes)
 app.use('/auth', authRoutes)
+app.use('/profile', profileRoutes)
 
 app.use(mistakeRoutes)
 //global port//

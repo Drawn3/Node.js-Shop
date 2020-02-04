@@ -67,6 +67,7 @@ router.post('/edit', auth, async (req,res)=>{
         const {id} = req.body
         delete req.body.id
         const course = await Course.findById(id)
+        
         if(!ownerCourse(course,req)){
             return res.redirect('/courses')
         }
