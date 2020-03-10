@@ -16,7 +16,7 @@ function mapCartItems(cart){
     return cart.items.map(item => ({
        ...item.courseId._doc,
        id: item.courseId.id,
-       count: item.count + 1
+       count: item.count 
      }
     ))
 }
@@ -42,7 +42,6 @@ router.delete('/remove/:id', auth, async (req,res)=>{
 //bracket page//
 router.get('/', auth, async (req,res)=>{  
     const user = await req.user.populate('cart.items.courseId').execPopulate()
-
     const courses = mapCartItems(user.cart)
     res.render('card',{
         title:'Корзина',

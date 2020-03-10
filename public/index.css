@@ -1,10 +1,25 @@
+body{
+    background-color: #f3f1f1;
+    font-family: 'Roboto', sans-serif;
+}
+h1{
+    margin: 20px 0px !important;
+    font-weight:400;
+}
 .nav-wrapper{
     padding: 0 2rem;
 }
 .price {
     font-size: 1.5rem;
 }
-
+#registration, #login{
+    display: block;
+    background: white;
+    margin-top: 20px;
+    padding: 20px 20px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
 .course{
     width: 100%;
     display: flex;
@@ -27,7 +42,8 @@
 .card-action.actions{
     display: flex;
     align-items:center;
-    justify-content: space-between;
+    justify-content: space-around;
+    flex-direction: row;
 }
 
 .auth{
@@ -104,6 +120,44 @@ a{
   }
   
   .avatar{
-      max-width: 300px;
+      max-width: 600px;
       height: auto;
+  }
+
+  .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+    color: #ffab40;
+    margin-right: 0px !important;
+    -webkit-transition: color .3s ease;
+    transition: color .3s ease;
+    text-transform: uppercase;
+  }
+
+  @media only screen and (max-width: 601px){
+    .card-action.actions{
+        display: flex;
+        align-items:center;
+        justify-content: space-around;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+    .card-content{
+        text-align: center;
+    }
+    .card .card-action a {
+        color: #ffab40;
+        margin-right: 0px !important;
+        margin-bottom: 15px !important;
+        font-size: 12px;
+        -webkit-transition: color .3s ease;
+        transition: color .3s ease;
+        text-transform: uppercase;
+      }
+    .course img {
+        max-width: 400px;
+        height:auto
+    }
+
+    h1{
+        font-size: 25px;
+    }
   }

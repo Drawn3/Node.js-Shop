@@ -1,6 +1,6 @@
-  <nav>
+  <nav class="blue darken-1">
     <div class="nav-wrapper">
-      <a href="#!" class="brand-logo">Магазин курсов</a>
+      <a href="/" class="brand-logo">Магазин курсов</a>
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">+</i></a>
       <ul class="right hide-on-med-and-down">
         {{#if isHome}}
@@ -33,6 +33,11 @@
                 <li class="active"><a href="/orders">Заказы</a></li>
             {{else}}
                 <li><a href="/orders">Заказы</a></li>
+            {{/if}}
+            {{#if isArticles}}
+                <li class="active"><a href="/articles">Статьи</a></li>
+            {{else}}
+                <li><a href="/articles">Статьи</a></li>
             {{/if}}
                 <li><a href="/auth/logout">Выйти</a></li>
              {{else}}

@@ -53,7 +53,6 @@ router.post("/remove", auth, async (req,res)=>{
          await Course.deleteOne({
              _id: req.body.id,
              userId: req.user._id
-            
             })
          res.redirect('/courses')
     }catch(e){

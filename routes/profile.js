@@ -21,9 +21,7 @@ router.post('/', auth, async (req,res) =>{
         if(req.file){
             toChange.userAvatar = req.file.path
         }
-        console.log(toChange)
         Object.assign(user, toChange)
-
         await user.save()
 
         res.redirect('/profile')

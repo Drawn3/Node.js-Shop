@@ -1,12 +1,9 @@
-//price transformation//
-window.onload = function (){
+const loader = () =>{
    let i = document.querySelector('.lds-circle');
-   setTimeout(()=>{
    i.style.display = 'none'
-    }, 5000)
 }
 
-
+//price transformation//
 const toCurrency = price =>{
    return new Intl.NumberFormat('ru-Ru',{
       currency: 'rub',
@@ -18,7 +15,7 @@ document.querySelectorAll('.price').forEach(node=>{
 })
 
 //date transformation//
-const toDate = date =>{
+const toDate = date =>{ц
    return new Intl.DateTimeFormat('ru-Ru',{
       day: '2-digit',
       month: 'long',
@@ -69,10 +66,10 @@ if($card){
             }
          })
          .catch(err=>console.log(err))
-      }
+      } 
    })
 }
 
 
-var instance = M.Tabs.init(document.querySelectorAll('.tabs'));
-var instances = M.Sidenav.init(document.querySelectorAll('.sidenav'));
+var tabs = M.Tabs.init(document.querySelectorAll('.tabs'));
+var sidenav = M.Sidenav.init(document.querySelectorAll('.sidenav'));

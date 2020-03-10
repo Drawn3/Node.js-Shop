@@ -3,6 +3,6 @@ module.exports = {
     SESSION_SECRET: 'some secret',
     SEND_GRID_APIKEYS: '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',
     EMAIL_FROM: 'Nodecourse@mail.ru',
-    BASE_URL: 'http://localhost:4000'
-
+    BASE_URL: 'http://localhost:4000',
+    PORT: 4000
 }

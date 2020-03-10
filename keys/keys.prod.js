@@ -3,5 +3,6 @@ module.exports = {
     SESSION_SECRET:  process.env.SESSION_SECRET,
     EMAIL_FROM:  process.env.EMAIL_FROM,
     BASE_URL:  process.env.BASE_URL,
-    SEND_GRID_APIKEYS:  process.env.SEND_GRID_APIKEYS
+    SEND_GRID_APIKEYS:  process.env.SEND_GRID_APIKEYS,
+    PORT: process.env.PORT 
 }
